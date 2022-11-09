@@ -1,0 +1,57 @@
+.leaderboard {
+  margin: 30px;
+}
+
+.card-leaderboard {
+  margin: 0 auto;
+  padding: 15px;
+  width: 350px;
+  border-radius: 20px;
+  box-shadow: 1px 1px 12px -2px rgba(0,0,0,0.75);
+  -webkit-box-shadow: 1px 1px 12px -2px rgba(0,0,0,0.75);
+  -moz-box-shadow: 1px 1px 12px -2px rgba(0,0,0,0.75);
+}
+
+.card-leaderboard h1 {
+  text-align: center;
+}
+
+.winner-leaderboard{
+  text-align: center;
+}
+
+.winner-leaderboard img {
+  width: 70px;
+}
+
+.text-winner {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.text-score {
+  display: block;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.winner-leaderboard ol {
+  margin-top: 17px;
+}
+
+.winner-leaderboard ol li {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 10px 15px;
+  background-color: rgba(113, 113, 113, 0.1);
+  border-radius: 30px;
+  margin: 10px 0px;
+  font-size: 1.2rem;
+} 
+
+.winner-leaderboard ol li span:nth-child(1) {
+  font-weight: bold;
+}
+

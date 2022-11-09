@@ -1,0 +1,71 @@
+.myquizes-container {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.myquizes-container h1 {
+  margin-bottom: 10px;
+}
+
+.card__quiz {
+  border: 1px solid #c9c9c9;
+  border-radius: 10px;
+  padding: 17px;  
+  margin: 32px 0;
+}
+
+.card__quiz h1 {
+  margin-bottom: 10px;
+}
+
+.card__quiz label {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.form {
+  display: block;
+  width: 90%;
+  padding: 7px;
+  margin: 5px 10px 10px 0;
+  border-radius: 5px;
+  border-color: #c9c9c9;
+}
+
+.option-button {
+  width: 120px;
+  height: 35px;
+  margin: 10px;
+  padding: 10px;
+  background-color: inherit;
+  outline: none;
+  color: rgb(110, 110, 110);
+  font-size: 0.8rem;
+  border: 1px solid black;
+  border-radius: 2%;
+}
+
+.option-button:hover {
+  background-color: rgb(19, 104, 206);
+  color: white;
+}
+
+.button-submit {
+  width: 100px;
+  margin: 0px;
+  cursor: pointer;
+  display: inline-block;
+  box-shadow: rgb(0 0 0 / 25%) 0px -4px inset;
+  background: rgb(19, 104, 206);
+  color: rgb(255, 255, 255);
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  min-width: 42px;
+  min-height: 42px;
+  padding: 0px 16px 4px;
+  position: relative;
+  line-height: 0.875rem;
+}

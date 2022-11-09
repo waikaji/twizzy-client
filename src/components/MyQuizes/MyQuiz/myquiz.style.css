@@ -1,0 +1,29 @@
+.card__myquiz {
+  border: 1px solid #c9c9c9;
+  display: flex;
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
+
+.card__right {
+  max-width: 250px;
+  max-height: 250px;
+  overflow: hidden;
+}
+
+.img-quiz {
+  width: 100%;
+  height: auto;
+  border-radius: 10px 0 0 10px;
+}
+
+.card__left {
+  padding-left: 1rem;
+  padding-top: 10px;
+  position: relative;
+}
+
+.card__btn {
+  position: absolute;
+  bottom: 20px;
+}
