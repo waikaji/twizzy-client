@@ -63,30 +63,28 @@ function HostScreen() {
   }, [])
 
   useEffect(() => {
-    const updateLeaderboard = async (data, id, score) => {
-      let question = await dispatch(updateQuestionLeaderboard(data, id))
-      setQuestionResult(question.questionLeaderboard[data.questionIndex - 1])
-      let leaderboardData = {
-        questionIndex: data.questionIndex,
-        playerId: data.playerId,
-        playerCurrentScore: score,
-      }
-      let leaderboard = await dispatch(
-        updateCurrentLeaderboard(leaderboardData, id)
-      )
-      setCurrentLeaderboard(
-        leaderboard.currentLeaderboard[data.questionIndex - 1]
-      )
-    }
-
     socket?.on("get-answer-from-player", (data, id, score, player) => {
       updateLeaderboard(data, id, score)
       let playerData = { id: data.playerId, userName: player.userName }
       setPlayerList((prevstate) => [...prevstate, playerData])
     })
-  }, [socket, dispatch])
+  }, [socket])
 
-  
+  const updateLeaderboard = async (data, id, score) => {
+    let question = await dispatch(updateQuestionLeaderboard(data, id))
+    setQuestionResult(question.questionLeaderboard[data.questionIndex - 1])
+    let leaderboardData = {
+      questionIndex: data.questionIndex,
+      playerId: data.playerId,
+      playerCurrentScore: score,
+    }
+    let leaderboard = await dispatch(
+      updateCurrentLeaderboard(leaderboardData, id)
+    )
+    setCurrentLeaderboard(
+      leaderboard.currentLeaderboard[data.questionIndex - 1]
+    )
+  }
 
   const startGame = () => {
     socket.emit("start-game", quiz)

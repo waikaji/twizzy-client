@@ -115,8 +115,7 @@ function PlayerScreen() {
     }))
   }
 
-  useEffect(() => {
-    const sendAnswer = async () => {
+  const sendAnswer = async () => {
       const updatedPlayerResult = await dispatch(
         addAnswer(answer, playerResult._id)
       )
@@ -136,6 +135,7 @@ function PlayerScreen() {
       dispatch(getPlayerResult(playerResult._id))
     }
 
+  useEffect(() => {
     if (
       answer?.answers.length > 0 &&
       answer?.answers.length === correctAnswerCount
@@ -146,7 +146,7 @@ function PlayerScreen() {
     } else {
       setIsQuestionAnswered(false)
     }
-  }, [answer?.answers.length, correctAnswerCount, answer, socket, dispatch, playerResult])
+  }, [answer?.answers.length, correctAnswerCount, answer, socket])
 
   return (
     <div className="page">
