@@ -2,6 +2,7 @@ import "./winnerLeaderboard.style.css";
 import crown from "../../../assets/crown.png";
 
 const WinnerLeaderboard = () => {
+
   return (
     <section className="leaderboard">
       <div className="card-leaderboard">

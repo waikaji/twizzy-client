@@ -3,6 +3,7 @@ import {
   CREATE_LEADERBOARD,
   ADD_PLAYER_RESULT,
   FETCH_LEADERBOARD,
+  FETCH_WINNER_LEADERBOARD,
   UPDATE_QUESTION_LEADERBOARD,
   UPDATE_CURRENT_LEADERBOARD,
 } from "../constants/actionTypes";
@@ -21,6 +22,16 @@ export const getLeaderboard = (id) => async (dispatch) => {
   try {
     const { data } = await api.fetchLeaderboard(id);
     dispatch({ type: FETCH_LEADERBOARD, payload: { leaderboard: data } });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const getWinnerLeaderboard = (id) => async (dispatch) => {
+  try {
+    const { data } = await api.fetchWinnerLeaderboard(id);
+    dispatch({ type: FETCH_WINNER_LEADERBOARD, payload: { data }});
+    return data;
   } catch (error) {
     console.log(error);
   }

@@ -39,6 +39,7 @@ export const addAnswer = (newAnswer, id) => API.patch(`/playerResults/${id}/answ
 
 export const createLeaderboard = (newLeaderboard) => API.post("/leaderboard", newLeaderboard);
 export const fetchLeaderboard = (id) => API.get(`/leaderboard/${id}`, id);
+export const fetchWinnerLeaderboard = (id) => API.get(`/leaderboard/winnerLeaderboard/${id}`, id);
 export const addPlayerResult = (playerResult, id) => API.patch(`/leaderboard/${id}/playerresult`, playerResult);
 export const updateQuestionLeaderboard = (questionResult, id) => API.patch(`/leaderboard/${id}/questionleaderboard`, questionResult);
 export const updateCurrentLeaderboard = (result, id) => API.patch(`/leaderboard/${id}/currentleaderboard`, result);

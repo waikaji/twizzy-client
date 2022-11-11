@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import WaitingRoom from "../WaitingRoom/WaitingRoom";
 import { useDispatch, useSelector } from "react-redux";
 import { getGame } from "../../../actions/game";
 import { getQuiz } from "../../../actions/quiz";
 import {
+  getWinnerLeaderboard,
   updateQuestionLeaderboard,
   updateCurrentLeaderboard,
 } from "../../../actions/leaderboard";
 import "./hostScreen.style.css";
 import Question from "../Question/Question";
+import crown from "../../../assets/crown.png";
 
 function HostScreen() {
   const socket = useSelector((state) => state.socket.socket)
@@ -18,6 +20,7 @@ function HostScreen() {
   const [isQuestionScreen, setIsQuestionScreen] = useState(false)
   const [isQuestionResultScreen, setIsQuestionResultScreen] = useState(false)
   const [isLeaderboardScreen, setIsLeaderboardScreen] = useState(false)
+  const [isFinalLeaderboard, setIsFinalLeaderboard] = useState(false)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [timer, setTimer] = useState(0)
   const [playerList, setPlayerList] = useState([])
@@ -36,7 +39,6 @@ function HostScreen() {
     questionIndex: 1,
   })
   const dispatch = useDispatch()
-  const navigate = useNavigate()
   const { id } = useParams()
   const { game } = useSelector((state) => state.games)
   const { quiz } = useSelector((state) => state.quiz)
@@ -47,6 +49,7 @@ function HostScreen() {
   const [currentLeaderboard, setCurrentLeaderboard] = useState(
     leaderboard?.currentLeaderboard[0]
   )
+  const [rankingLeaderboad, setRankingLeaderboard] = useState()
 
   useEffect(() => {
     dispatch(getGame(id))
@@ -104,8 +107,6 @@ function HostScreen() {
       if (time === 0) {
         clearInterval(interval)
         displayQuestion(index)
-        setIsPreviewScreen(false)
-        setIsQuestionScreen(true)
       }
       time--
     }, 1000)
@@ -133,10 +134,13 @@ function HostScreen() {
     setIsLeaderboardScreen(true)
   }
 
-  const displayQuestion = (index) => {
+  const displayQuestion = async (index) => {
     if (index === (quiz.questionList.length)) {
-      socket.emit("host-to-leaderboard")
-      navigate("/leaderboard")
+      let winnerLeaderboard = await dispatch(getWinnerLeaderboard(leaderboard._id))
+      setRankingLeaderboard(winnerLeaderboard)
+      setIsPreviewScreen(false)
+      setIsQuestionScreen(false)
+      setIsFinalLeaderboard(true)
       // displayCurrentLeaderBoard(index)
     } else {
       setQuestionData(quiz.questionList[index])
@@ -152,6 +156,8 @@ function HostScreen() {
       socket.emit("start-question-timer", time, question, () => {
         startQuestionCountdown(time, index + 1)
       })
+      setIsPreviewScreen(false)
+      setIsQuestionScreen(true)
     }
   }
 
@@ -160,10 +166,15 @@ function HostScreen() {
   }
 
   const clickNextQuestion = () => {
-    socket.emit("question-preview", () => {
+    if (currentQuestionIndex === (quiz.questionList.length)) {
+      socket.emit("host-to-leaderboard")
       startPreviewCountdown(5, currentQuestionIndex)
-      setPlayerList([])
-    })
+    } else {
+      socket.emit("question-preview", () => {
+        startPreviewCountdown(5, currentQuestionIndex)
+        setPlayerList([])
+      })
+    }
   }
 
   // console.log(playerList)
@@ -180,7 +191,7 @@ function HostScreen() {
 
       {isPreviewScreen && (
         <div className="timer-preview timer-center">
-          <h2>Waiting for question</h2>
+          <h2>Loading</h2>
           <h1>{timer}</h1>
         </div>
       )}
@@ -250,6 +261,49 @@ function HostScreen() {
           </div>
         </section>
       )}
+      {
+        isFinalLeaderboard && (
+          <section className="leaderboard">
+            <div className="card-leaderboard">
+              <div className="winner-leaderboard">
+                <ol>
+                  {
+                    rankingLeaderboad.currentLeaderboard.leaderboardList.map((player, index) => {
+                      if(index === 0) {
+                        return (
+                          <>
+                            <img src={crown} alt="crown" key={player.playerId}/>
+                            {playerList
+                              .filter((x) => x.id === player.playerId)
+                              .map((x) => (
+                                  <label className="text-winner">The Winner is {x.userName}</label>
+                              ))
+                            }
+                            <label className="text-score">Score : {player.playerCurrentScore} points</label>
+                          </>
+                        )
+                      }else {
+                        return (
+                          <li key={player.playerId}>
+                            <span>{index}</span>
+                            {playerList
+                              .filter((x) => x.id === player.playerId)
+                              .map((x) => (
+                                  <span>{x.userName}</span>
+                              ))
+                            }
+                            <span>{player.playerCurrentScore} points</span>
+                          </li>
+                        )
+                      }
+                    })
+                  }
+                </ol>
+              </div>
+            </div>
+          </section>
+        )
+      }
     </div>
   )
 }

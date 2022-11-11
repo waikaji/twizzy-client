@@ -9,7 +9,7 @@ import Create from './pages/create.page';
 import AuthPage from './pages/auth.page';
 import JoinGamePage from './pages/joingame.page';
 import HostScreenPage from './pages/hostscreen.page';
-import PlayerScreen from './components/Game/PlayerScreen/PlayerScreen';
+import PlayerScreenPage from './pages/playerscreen.page';
 import LeaderboardPage from './pages/leaderboard.page';
 
 function App() {
@@ -32,8 +32,8 @@ function App() {
         <Route path='/auth' exact element={<AuthPage />} />
         <Route path='/games/joingame' exact element={<JoinGamePage />} />
         <Route path='/games/host/:id' exact element={<HostScreenPage />} />
-        <Route path='/games/player/:id' exact element={<PlayerScreen />} />
-        <Route path='/leaderboard' exact element={<LeaderboardPage />} />
+        <Route path='/games/player/:id' exact element={<PlayerScreenPage />} />
+        <Route path='/leaderboard/:id' exact element={<LeaderboardPage />} />
       </Routes>
     </Router>
   );

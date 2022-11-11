@@ -1,7 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { addAnswer, getPlayerResult } from "../../../actions/playerResult";
 import "./playerScreen.style.css";
 import Answer from "../Answer/Answer";
@@ -12,11 +11,13 @@ import square from "../../../assets/square.svg";
 import { CircularProgress } from "@material-ui/core";
 import correct from "../../../assets/checkbox.png";
 import wrong from "../../../assets/cancel.png";
+import { getWinnerLeaderboard } from "../../../actions/leaderboard";
+import crown from "../../../assets/crown.png";
 
 function PlayerScreen() {
+  const user = JSON.parse(localStorage.getItem("profile"))
   const socket = useSelector((state) => state.socket.socket)
   const dispatch = useDispatch()
-  const navigate = useNavigate()
   const { playerResult } = useSelector((state) => state.playerResults)
   const [result, setResult] = useState(playerResult?.answers[0])
 
@@ -24,6 +25,8 @@ function PlayerScreen() {
   const [isPreviewScreen, setIsPreviewScreen] = useState(false)
   const [isQuestionScreen, setIsQuestionScreen] = useState(false)
   const [isResultScreen, setIsResultScreen] = useState(false)
+  const [isRankingLeaderboard, setIsRankingLeaderboard] = useState(false)
+  const [rankingLeaderboard, setRankingLeaderboard] = useState()
   const [timer, setTimer] = useState(0)
   const [answerTime, setAnswerTime] = useState(0)
   const [questionData, setQuestionData] = useState()
@@ -56,10 +59,27 @@ function PlayerScreen() {
       }))
       setCorrectAnswerCount(question.correctAnswersCount)
     })
-    socket.on("player-to-leaderboard", (gameId) => {
-      navigate("/leaderboard")
+    socket.on("player-to-leaderboard", (leaderboardId) => {
+      setIsPreviewScreen(true);
+      setIsResultScreen(false);
+      displayRankingLeaderboard(leaderboardId, 5);
     })
-  }, [socket, navigate])
+  }, [socket])
+
+  const displayRankingLeaderboard = async (leaderboardId, seconds) => {
+    let winnerLeaderboard = await dispatch(getWinnerLeaderboard(leaderboardId));
+    setRankingLeaderboard(winnerLeaderboard);
+    let time = seconds
+    let interval = setInterval(() => {
+      setTimer(time)
+      if(time === 0) {
+        clearInterval(interval)
+        setIsPreviewScreen(false)
+        setIsRankingLeaderboard(true)
+      }
+      time--
+    }, 1000)
+  }
 
   const startPreviewCountdown = (seconds) => {
     let time = seconds
@@ -116,24 +136,24 @@ function PlayerScreen() {
   }
 
   const sendAnswer = async () => {
-      const updatedPlayerResult = await dispatch(
-        addAnswer(answer, playerResult._id)
-      )
-      console.log(
-        updatedPlayerResult.answers[updatedPlayerResult.answers.length - 1]
-      )
-      setResult(
-        updatedPlayerResult.answers[updatedPlayerResult.answers.length - 1]
-      )
-      let data = {
-        questionIndex: answer.questionIndex,
-        playerId: updatedPlayerResult.playerId,
-        playerPoints: updatedPlayerResult.answers[answer.questionIndex - 1].points,
-      }
-      let score = updatedPlayerResult.score
-      socket.emit("send-answer-to-host", data, score)
-      dispatch(getPlayerResult(playerResult._id))
+    const updatedPlayerResult = await dispatch(
+      addAnswer(answer, playerResult._id)
+    )
+    console.log(
+      updatedPlayerResult.answers[updatedPlayerResult.answers.length - 1]
+    )
+    setResult(
+      updatedPlayerResult.answers[updatedPlayerResult.answers.length - 1]
+    )
+    let data = {
+      questionIndex: answer.questionIndex,
+      playerId: updatedPlayerResult.playerId,
+      playerPoints: updatedPlayerResult.answers[answer.questionIndex - 1].points,
     }
+    let score = updatedPlayerResult.score
+    socket.emit("send-answer-to-host", data, score)
+    dispatch(getPlayerResult(playerResult._id))
+  }
 
   useEffect(() => {
     if (
@@ -152,7 +172,7 @@ function PlayerScreen() {
     <div className="page">
       {isPreviewScreen && (
         <div className="timer-preview timer-center">
-          <h2>Waiting for question</h2>
+          <h2>Loading</h2>
           <h1>{timer}</h1>
         </div>
       )}
@@ -211,6 +231,19 @@ function PlayerScreen() {
           </div>
         </div>
       )}
+      {
+        isRankingLeaderboard && (
+          <section className="leaderboard">
+            <div className="card-leaderboard">
+              <div className="winner-leaderboard">
+                <img src={crown} alt="crown" />
+                <label className="text-winner">Your rank is {rankingLeaderboard.currentLeaderboard.leaderboardList.findIndex((val) => val.playerId === user.result._id) + 1}</label>
+                <label className="text-score">Score : {rankingLeaderboard.currentLeaderboard.leaderboardList.find((val) => val.playerId === user.result._id).playerCurrentScore} points</label>
+              </div>
+            </div>
+          </section>
+        )
+      }
     </div>
   )
 }

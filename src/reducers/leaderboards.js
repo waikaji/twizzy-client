@@ -2,6 +2,7 @@ import {
   CREATE_LEADERBOARD,
   ADD_PLAYER_RESULT,
   FETCH_LEADERBOARD,
+  FETCH_WINNER_LEADERBOARD,
   UPDATE_QUESTION_LEADERBOARD,
   UPDATE_CURRENT_LEADERBOARD,
 } from "../constants/actionTypes";
@@ -15,6 +16,8 @@ const reducer = (state = { leaderboards: [], leaderboard: null}, action) => {
         leaderboard: action.payload,
       }
     case FETCH_LEADERBOARD:
+      return {...state, leaderboard: action.payload.leaderboard}
+    case FETCH_WINNER_LEADERBOARD:
       return {...state, leaderboard: action.payload.leaderboard}
     case ADD_PLAYER_RESULT:
     case UPDATE_QUESTION_LEADERBOARD:
