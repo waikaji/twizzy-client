@@ -10,6 +10,7 @@
 
 .timer-preview h1 {
   font-size: 3rem;
+  margin-bottom: 10px;
 }
 
 .answers-container {
@@ -32,4 +33,11 @@
 
 .correct-icon {
   width: 100px;
+}
+
+@media screen and (max-width: 430px) {
+  .timer-preview h1 {
+    font-size: 2rem;
+    margin-bottom: 14px;
+  }
 }

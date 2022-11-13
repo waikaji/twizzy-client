@@ -68,3 +68,13 @@
 .list-user ol li span:nth-child(1) {
   font-weight: bold;
 }
+
+@media screen and (max-width: 430px) {
+  .waiting-room {
+    width: 100%;
+  }
+
+  .leaderboard-title {
+    font-size: 1.2rem;
+  }
+}

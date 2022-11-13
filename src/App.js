@@ -10,7 +10,6 @@ import AuthPage from './pages/auth.page';
 import JoinGamePage from './pages/joingame.page';
 import HostScreenPage from './pages/hostscreen.page';
 import PlayerScreenPage from './pages/playerscreen.page';
-import LeaderboardPage from './pages/leaderboard.page';
 
 function App() {
   // const user = JSON.parse(localStorage.getItem("profile"));
@@ -33,7 +32,6 @@ function App() {
         <Route path='/games/joingame' exact element={<JoinGamePage />} />
         <Route path='/games/host/:id' exact element={<HostScreenPage />} />
         <Route path='/games/player/:id' exact element={<PlayerScreenPage />} />
-        <Route path='/leaderboard/:id' exact element={<LeaderboardPage />} />
       </Routes>
     </Router>
   );

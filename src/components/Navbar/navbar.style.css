@@ -1,6 +1,6 @@
 .header {
   width: 100%;
-  height: 6vh;
+  height: 45px;
   box-shadow: 0 0 10px #80838b;
   display: flex;
   align-items: center;
@@ -114,4 +114,24 @@
 .nav__list-item-drop-1 li:hover,
 .nav__list-item-drop-1 li:focus {
   background-color: #fce4ec;
+}
+
+@media screen and (max-width: 768px) {
+  .btn-create {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 430px) {
+  .banner-image {
+    display: none;
+  }
+  .banner {
+    width: 80%;
+    margin: 0 auto;
+    height: auto;
+  }
+  .card-container {
+    flex-wrap: wrap;
+  }
 }

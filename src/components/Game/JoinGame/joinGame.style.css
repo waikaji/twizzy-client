@@ -62,3 +62,9 @@
 .joingame-section h4 {
   font-size: 1.6 rem;
 }
+
+@media screen and (max-width: 430px) {
+  .joingame-section input {
+    width: 80%;
+  }
+}

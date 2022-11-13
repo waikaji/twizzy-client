@@ -86,3 +86,12 @@
   color: #24262b;
   background-color: #ffffff;
 }
+
+@media screen and (max-width: 430px) {
+  .footer-row {
+    justify-content: center;
+  }
+  .footer-column {
+    width: 50%;
+  }
+}
