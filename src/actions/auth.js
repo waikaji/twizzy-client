@@ -7,7 +7,7 @@ export const login = (formData, navigate) => async (dispatch) => {
     dispatch({ type: AUTH, data });
     navigate("/");
   } catch (error) {
-    console.log(error);
+    return error.response.data.message;
   }
 }
 
@@ -17,6 +17,6 @@ export const register = (formData, navigate) => async (dispatch) => {
     dispatch({ type: AUTH, data });
     navigate("/");
   } catch (error) {
-    console.log(error);
+    return error.response.data.message;
   }
 }
