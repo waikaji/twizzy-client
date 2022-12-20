@@ -58,11 +58,11 @@ const Navbar = () => {
                 <img src={avatar} alt='user account' className='user-img' />
                 {/* Dropdown */}
                 <ul className="nav__list-item-drop-1">
-                  <li>
+                  {/* <li>
                     <Link to="/">
                       Edit Profile 
                     </Link>
-                  </li>
+                  </li> */}
                   <li onClick={logout}>
                     Logout
                   </li>
@@ -72,7 +72,7 @@ const Navbar = () => {
             ):(
             <>
               <li>
-                <Link to='/auth' className='nav__list-item'>
+                <Link to='/auth' className='nav__list-item btn-play'>
                   Log in
                 </Link>
               </li>
