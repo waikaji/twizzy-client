@@ -325,7 +325,7 @@ const QuizCreator = () => {
               name={"a"}
               onChange={(e) => {
                 isQuestionTrueFalse
-                  ? updateAnswer(e.target.name, "True", 0)
+                  ? updateAnswer(e.target.name, "Yes", 0)
                   : updateAnswer(e.target.name, e.target.value, 0)
               }}
               onClick={() => {
@@ -343,7 +343,7 @@ const QuizCreator = () => {
               name={"b"}
               onChange={(e) => {
                 isQuestionTrueFalse
-                  ? updateAnswer(e.target.name, "False", 1)
+                  ? updateAnswer(e.target.name, "No", 1)
                   : updateAnswer(e.target.name, e.target.value, 1)
               }}
               onClick={() => {

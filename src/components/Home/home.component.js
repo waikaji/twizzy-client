@@ -19,7 +19,7 @@ function Home() {
                 Make learning awesome
               </h2>
               <p className="banner-description">
-                  Quizzly delivers engaging learning to billions
+                  Twizzy delivers engaging learning to billions
               </p>
               <button className="banner-button">
                 <Link to="/">
@@ -51,7 +51,7 @@ function Home() {
           <div className="info">
             <div className="info-body">
               <h2 className="info-title">
-                Quizzly at school
+                Twizzy at school
               </h2>
               <p className="info-description">
                 Engaging group and distance learning for teachers and students.
@@ -64,7 +64,7 @@ function Home() {
           <div className="info">
             <div className="info-body">
               <h2 className="info-title">
-                Quizzly at work
+                Twizzy at work
               </h2>
               <p className="info-description">
                 Deliver training, presentations, meetings and events in-person or on any video conferencing platform.
@@ -77,7 +77,7 @@ function Home() {
           <div className="info">
             <div className="info-body">
               <h2 className="info-title">
-                Quizzly at home
+                Twizzy at home
               </h2>
               <p className="info-description">
                 Learning Apps and games for family fun or home study.
@@ -90,7 +90,7 @@ function Home() {
         </section>
         <section className="third-section">
           <h1>
-            How does Quizzly work?
+            How does Twizzy work?
           </h1>
           <div className="card-container">
             <div className="card-home">
@@ -124,7 +124,7 @@ function Home() {
             </div>
           </div>
           <div className="card-button">
-            Play Quizzly to see how it works.{" "}
+            Play Twizzy to see how it works.{" "}
             &nbsp;
             <a href="/">
               Explore our public quizes

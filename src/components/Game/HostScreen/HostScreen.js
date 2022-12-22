@@ -285,7 +285,7 @@ function HostScreen() {
                       }else {
                         return (
                           <li key={player.playerId}>
-                            <span>{index}</span>
+                            <span>{index + 1}</span>
                             {playerList
                               .filter((x) => x.id === player.playerId)
                               .map((x) => (
