@@ -27,7 +27,8 @@ function PlayerScreen() {
   const [isResultScreen, setIsResultScreen] = useState(false)
   const [isRankingLeaderboard, setIsRankingLeaderboard] = useState(false)
   const [rankingLeaderboard, setRankingLeaderboard] = useState()
-  const [timer, setTimer] = useState(0)
+  const [timer, setTimer] = useState(5)
+  const [questionTimer, setQuestionTimer] = useState(5)
   const [answerTime, setAnswerTime] = useState(0)
   const [questionData, setQuestionData] = useState()
   const [correctAnswerCount, setCorrectAnswerCount] = useState(1)
@@ -50,13 +51,13 @@ function PlayerScreen() {
     })
     socket.on("host-start-question-timer", (time, question) => {
       setQuestionData(question.answerList)
-      startQuestionCountdown(time)
       setAnswer((prevstate) => ({
         ...prevstate,
         questionIndex: question.questionIndex,
-        answers: [],
+        answers: ["e"],
         time: 0,
       }))
+      startQuestionCountdown(time)
       setCorrectAnswerCount(question.correctAnswersCount)
     })
     socket.on("player-to-leaderboard", (leaderboardId) => {
@@ -76,6 +77,7 @@ function PlayerScreen() {
         clearInterval(interval)
         setIsPreviewScreen(false)
         setIsRankingLeaderboard(true)
+        setTimer(5)
       }
       time--
     }, 1000)
@@ -89,6 +91,7 @@ function PlayerScreen() {
         clearInterval(interval)
         setIsPreviewScreen(false)
         setIsQuestionScreen(true)
+        setTimer(5)
       }
       time--
     }, 1000)
@@ -98,7 +101,7 @@ function PlayerScreen() {
     let time = seconds
     let answerSeconds = 0
     let interval = setInterval(() => {
-      setTimer(time)
+      setQuestionTimer(time)
       setAnswerTime(answerSeconds)
       if (time === 0) {
         clearInterval(interval)
@@ -126,7 +129,7 @@ function PlayerScreen() {
       //add answer
       setAnswer((prevstate) => ({
         ...prevstate,
-        answers: [...prevstate.answers, name],
+        answers: [name],
       }))
     }
     setAnswer((prevstate) => ({
@@ -139,9 +142,9 @@ function PlayerScreen() {
     const updatedPlayerResult = await dispatch(
       addAnswer(answer, playerResult._id)
     )
-    console.log(
-      updatedPlayerResult.answers[updatedPlayerResult.answers.length - 1]
-    )
+    // console.log(
+    //   updatedPlayerResult.answers[updatedPlayerResult.answers.length - 1]
+    // )
     setResult(
       updatedPlayerResult.answers[updatedPlayerResult.answers.length - 1]
     )
@@ -158,15 +161,21 @@ function PlayerScreen() {
   useEffect(() => {
     if (
       answer?.answers.length > 0 &&
-      answer?.answers.length === correctAnswerCount
+      answer?.answers.length === correctAnswerCount &&
+      answer?.answers[0] !== "e" &&
+      questionTimer !== 0
     ) {
       setIsQuestionScreen(false)
       setIsQuestionAnswered(true)
-      sendAnswer()
     } else {
       setIsQuestionAnswered(false)
     }
-  }, [answer?.answers.length, correctAnswerCount, answer, socket])
+    if (questionTimer === 1) {
+      setIsQuestionAnswered(false)
+      sendAnswer()
+    }
+
+  }, [answer?.answers.length, correctAnswerCount, answer, socket, questionTimer])
 
   return (
     <div className="page">

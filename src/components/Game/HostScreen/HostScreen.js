@@ -22,7 +22,7 @@ function HostScreen() {
   const [isLeaderboardScreen, setIsLeaderboardScreen] = useState(false)
   const [isFinalLeaderboard, setIsFinalLeaderboard] = useState(false)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
-  const [timer, setTimer] = useState(0)
+  const [timer, setTimer] = useState(5)
   const [playerList, setPlayerList] = useState([])
   const [questionData, setQuestionData] = useState({
     questionType: "Quiz",
@@ -107,6 +107,7 @@ function HostScreen() {
       if (time === 0) {
         clearInterval(interval)
         displayQuestion(index)
+        setTimer(5)
       }
       time--
     }, 1000)
@@ -119,6 +120,7 @@ function HostScreen() {
       if (time === 0) {
         clearInterval(interval)
         displayQuestionResult()
+        setTimer(5)
       }
       time--
     }, 1000)
