@@ -4,6 +4,7 @@ import WaitingRoom from "../WaitingRoom/WaitingRoom";
 import { useDispatch, useSelector } from "react-redux";
 import { getGame } from "../../../actions/game";
 import { getQuiz } from "../../../actions/quiz";
+import { CircularProgress } from "@material-ui/core";
 import {
   getWinnerLeaderboard,
   updateQuestionLeaderboard,
@@ -18,6 +19,7 @@ function HostScreen() {
   const [isGameStarted, setIsGameStarted] = useState(false)
   const [isPreviewScreen, setIsPreviewScreen] = useState(false)
   const [isQuestionScreen, setIsQuestionScreen] = useState(false)
+  const [isWaitingLeaderboard, setIsWaitingLeaderboard] = useState(false)
   const [isQuestionResultScreen, setIsQuestionResultScreen] = useState(false)
   const [isLeaderboardScreen, setIsLeaderboardScreen] = useState(false)
   const [isFinalLeaderboard, setIsFinalLeaderboard] = useState(false)
@@ -85,7 +87,7 @@ function HostScreen() {
       updateCurrentLeaderboard(leaderboardData, id)
     )
     setCurrentLeaderboard(
-      leaderboard.currentLeaderboard[data.questionIndex - 1]
+      leaderboard.currentLeaderboard
     )
   }
 
@@ -119,16 +121,30 @@ function HostScreen() {
       setTimer(time)
       if (time === 0) {
         clearInterval(interval)
+        setIsQuestionScreen(false)
+        setIsWaitingLeaderboard(true)
+        waitingQuestionResult()
+      }
+      time--
+    }, 1000)
+  }
+
+  const waitingQuestionResult = () => {
+    let time = 0;
+    let interval = setInterval(() => {
+      setTimer(time)
+      if (time === 0) {
+        clearInterval(interval)
         displayQuestionResult()
         setTimer(5)
       }
       time--
     }, 1000)
   }
+
   const displayQuestionResult = () => {
-    setIsQuestionScreen(false)
+    setIsWaitingLeaderboard(false)
     setIsQuestionResultScreen(true)
-    
   }
 
   const displayCurrentLeaderBoard = () => {
@@ -179,7 +195,6 @@ function HostScreen() {
     }
   }
 
-  // console.log(playerList)
   return (
     <div className="page">
       {!isGameStarted && (
@@ -190,7 +205,12 @@ function HostScreen() {
           <WaitingRoom pin={game?.pin} socket={socket} />
         </div>
       )}
-
+      {isWaitingLeaderboard && (
+        <div className="timer-preview timer-center">
+          <h1>Wait for a result</h1>
+          <CircularProgress />
+        </div>
+      )}
       {isPreviewScreen && (
         <div className="timer-preview timer-center">
           <h2>Loading</h2>
