@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addAnswer, getPlayerResult } from "../../../actions/playerResult";
+import { useNavigate } from "react-router-dom";
 import "./playerScreen.style.css";
 import Answer from "../Answer/Answer";
 import diamond from "../../../assets/diamond.svg";
@@ -18,6 +19,7 @@ function PlayerScreen() {
   const user = JSON.parse(localStorage.getItem("profile"))
   const socket = useSelector((state) => state.socket.socket)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { playerResult } = useSelector((state) => state.playerResults)
   const [result, setResult] = useState(playerResult?.answers[0])
 
@@ -44,27 +46,31 @@ function PlayerScreen() {
   }, [])
 
   useEffect(() => {
-    socket.on("host-start-preview", () => {
-      setIsPreviewScreen(true)
-      setIsResultScreen(false)
-      startPreviewCountdown(5)
-    })
-    socket.on("host-start-question-timer", (time, question) => {
-      setQuestionData(question.answerList)
-      setAnswer((prevstate) => ({
-        ...prevstate,
-        questionIndex: question.questionIndex,
-        answers: ["e"],
-        time: 0,
-      }))
-      startQuestionCountdown(time)
-      setCorrectAnswerCount(question.correctAnswersCount)
-    })
-    socket.on("player-to-leaderboard", (leaderboardId) => {
-      setIsPreviewScreen(true);
-      setIsResultScreen(false);
-      displayRankingLeaderboard(leaderboardId, 5);
-    })
+    try {
+      socket.on("host-start-preview", () => {
+        setIsPreviewScreen(true)
+        setIsResultScreen(false)
+        startPreviewCountdown(5)
+      })
+      socket.on("host-start-question-timer", (time, question) => {
+        setQuestionData(question.answerList)
+        setAnswer((prevstate) => ({
+          ...prevstate,
+          questionIndex: question.questionIndex,
+          answers: ["e"],
+          time: 0,
+        }))
+        startQuestionCountdown(time)
+        setCorrectAnswerCount(question.correctAnswersCount)
+      })
+      socket.on("player-to-leaderboard", (leaderboardId) => {
+        setIsPreviewScreen(true);
+        setIsResultScreen(false);
+        displayRankingLeaderboard(leaderboardId, 5);
+      })
+    } catch(err) {
+      navigate(`/`)
+    }
   }, [socket])
 
   const displayRankingLeaderboard = async (leaderboardId, seconds) => {

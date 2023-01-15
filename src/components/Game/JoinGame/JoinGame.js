@@ -15,17 +15,21 @@ function JoinGame() {
   const socket = useSelector((state) => state.socket.socket);
   
   useEffect(() => {
-    socket.on("move-to-game-page", (gameId) => {
-      dispatch(
-        createPlayerResult({
-          playerId: user.result._id,
-          gameId: gameId,
-          score: 0,
-          answers: [],
-        })
-      )
-      navigate(`/games/player/${gameId}`);
-    })
+    try {
+      socket.on("move-to-game-page", (gameId) => {
+        dispatch(
+          createPlayerResult({
+            playerId: user.result._id,
+            gameId: gameId,
+            score: 0,
+            answers: [],
+          })
+        )
+        navigate(`/games/player/${gameId}`);
+      })
+    } catch(err) {
+      navigate(`/`);
+    }
   }, [socket, dispatch, navigate, user.result._id]);
 
   const result = (message, playerId, gameId) => {
